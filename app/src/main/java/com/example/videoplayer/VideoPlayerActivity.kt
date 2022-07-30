@@ -12,10 +12,8 @@ import android.widget.*
 import android.widget.SeekBar.OnSeekBarChangeListener
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
-import com.example.videoplayer.testClaass.EXTRA_VIDEO_KEY
 import java.util.*
 import java.util.concurrent.TimeUnit
-import kotlin.properties.Delegates
 
 
 class VideoPlayerActivity : AppCompatActivity(), View.OnClickListener,
@@ -48,8 +46,8 @@ class VideoPlayerActivity : AppCompatActivity(), View.OnClickListener,
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_video_player)
         init()
-        if (intent.getStringExtra(EXTRA_VIDEO_KEY) != null) {
-            fileFromListUri = Uri.parse(intent.getStringExtra(EXTRA_VIDEO_KEY))
+        if (intent.getStringExtra(R.string.EXTRA_VIDEO_KEY.toString()) != null) {
+            fileFromListUri = Uri.parse(intent.getStringExtra(R.string.EXTRA_VIDEO_KEY.toString()))
             myVideoView!!.setVideoURI(fileFromListUri)
         } else {
             fileFromStorageUri = intent.data
@@ -149,7 +147,6 @@ class VideoPlayerActivity : AppCompatActivity(), View.OnClickListener,
     }
 
     override fun onStartTrackingTouch(seekBar: SeekBar) {
-
         isUserTrackingSeekbar = true
     }
 

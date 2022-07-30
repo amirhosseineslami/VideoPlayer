@@ -12,12 +12,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.CodeBoy.MediaFacer.MediaFacer
 import com.CodeBoy.MediaFacer.VideoGet
 import com.CodeBoy.MediaFacer.mediaHolders.videoContent
-
 class MainActivity : AppCompatActivity(),RecyclerAdapter.onItemClickListener {
     lateinit var videoContents: ArrayList<videoContent>
     val permissionOfExternalStorage = arrayOf<String>(android.Manifest.permission.READ_EXTERNAL_STORAGE)
     val EXTERNAL_STORAGE_PERMISSION_REQ_CODE = 2
-    var EXTRA_VIDEO_KEY = "3242"
     lateinit var recyclerView:RecyclerView
     lateinit var recyclerAdapter:RecyclerAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -79,7 +77,7 @@ class MainActivity : AppCompatActivity(),RecyclerAdapter.onItemClickListener {
     override fun onItemClick(video: videoContent) {
         val uri:Uri = ContentUris.withAppendedId(VideoGet.externalContentUri,video.videoId)
         val intent:Intent = Intent(this,VideoPlayerActivity::class.java)
-            .putExtra(EXTRA_VIDEO_KEY,uri.toString())
+            .putExtra(R.string.EXTRA_VIDEO_KEY.toString(),uri.toString())
         startActivity(intent)
 
     }

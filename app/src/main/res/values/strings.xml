@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">VideoPlayer</string>
+    <string name="EXTRA_VIDEO_KEY">3243</string>
+
 </resources>
