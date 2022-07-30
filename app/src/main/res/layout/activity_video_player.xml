@@ -18,12 +18,13 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout_videoController"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
         android:layout_marginStart="0dp"
         android:layout_marginEnd="0dp"
+        android:background="@drawable/controller_bg"
         android:orientation="vertical"
         android:padding="8dp">
 
@@ -32,72 +33,72 @@
             style="@style/button_videoPlayer"
             android:src="@drawable/ic_baseline_play_arrow_24"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/button_forward"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.52"
-            app:layout_constraintStart_toEndOf="@+id/button_backward"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/guideline2"
             app:layout_constraintVertical_bias="0.273" />
 
         <ImageButton
             android:id="@+id/button_forward"
             style="@style/button_videoPlayer"
-            android:layout_marginEnd="24dp"
+            android:layout_marginStart="100dp"
             android:src="@drawable/ic_baseline_fast_forward_24"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/button_play_pause"
             app:layout_constraintTop_toTopOf="@+id/guideline2"
-            app:layout_constraintVertical_bias="0.289" />
+            app:layout_constraintVertical_bias="0.0" />
 
         <ImageButton
             android:id="@+id/button_backward"
             style="@style/button_videoPlayer"
-            android:layout_marginStart="24dp"
+            android:layout_marginEnd="100dp"
             android:src="@drawable/ic_baseline_fast_rewind_24"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/button_play_pause"
             app:layout_constraintTop_toTopOf="@+id/guideline2"
-            app:layout_constraintVertical_bias="0.257" />
+            app:layout_constraintVertical_bias="0.111" />
 
         <SeekBar
             android:id="@+id/videoPlayer_seekbar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView_playingTime"
+            android:layout_width="0dp"
+            android:layout_height="31dp"
             android:progressBackgroundTint="@color/white"
             android:progressTint="@color/primaryColor"
-            android:thumbTint="@color/darkPrimaryColor"/>
+            android:thumbTint="@color/darkPrimaryColor"
+            app:layout_constraintBottom_toTopOf="@+id/button_play_pause"
+            app:layout_constraintEnd_toStartOf="@+id/textView_fullTime"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@+id/textView_playingTime" />
 
         <TextView
-            style="@style/textView_videoPlayer"
             android:id="@+id/textView_playingTime"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="12dp"
-            android:layout_marginTop="12dp"
-            android:text="playingTime"
+            style="@style/textView_videoPlayer"
+            android:layout_width="56dp"
+            android:layout_height="25dp"
+            android:text="00:00:00"
+            android:textColor="@color/controller_textView_color"
+            app:layout_constraintBottom_toBottomOf="@+id/videoPlayer_seekbar"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/button_backward" />
+            app:layout_constraintTop_toTopOf="@+id/videoPlayer_seekbar" />
 
         <TextView
-            style="@style/textView_videoPlayer"
             android:id="@+id/textView_fullTime"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
-            android:text="playingTime"
+            style="@style/textView_videoPlayer"
+            android:layout_width="62dp"
+
+            android:layout_height="21dp"
+            android:text="00:00:00"
+            android:textColor="@color/controller_textView_color"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/button_forward" />
+            app:layout_constraintTop_toTopOf="@+id/textView_playingTime" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_begin="46dp" />
+            app:layout_constraintGuide_begin="140dp" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

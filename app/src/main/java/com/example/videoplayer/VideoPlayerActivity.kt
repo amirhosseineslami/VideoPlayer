@@ -5,10 +5,7 @@ import android.media.MediaPlayer
 import android.media.MediaPlayer.OnCompletionListener
 import android.media.MediaPlayer.OnPreparedListener
 import android.net.Uri
-import android.os.Bundle
-import android.os.Environment
-import android.os.Handler
-import android.os.Looper
+import android.os.*
 import android.util.Log
 import android.view.View
 import android.widget.*
@@ -23,6 +20,7 @@ import kotlin.properties.Delegates
 
 class VideoPlayerActivity : AppCompatActivity(), View.OnClickListener,
     OnPreparedListener, MediaPlayer.OnErrorListener, OnCompletionListener, OnSeekBarChangeListener {
+    private var currentPlayingTime: Int = 0
     private var isVideoCompleted: Boolean = false
     private var myVideoView: VideoView? = null
     private var playPauseBtn: ImageButton? = null
@@ -42,21 +40,25 @@ class VideoPlayerActivity : AppCompatActivity(), View.OnClickListener,
     private var isVideoCancelled: Boolean = false
     private var videoFullDurationTime: Int = 0
     private var fileFromStorageUri: Uri? = null
+    private val SAVED_INSTANCE_CURRENT_POSITION_KEY = "545"
+    private val SAVED_INSTANCE_ISPAUSED_KEY = "5t5"
+    private var recoveredLastVideoPosition = -1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_video_player)
         init()
-        if (intent.getStringExtra(EXTRA_VIDEO_KEY)!=null){
+        if (intent.getStringExtra(EXTRA_VIDEO_KEY) != null) {
             fileFromListUri = Uri.parse(intent.getStringExtra(EXTRA_VIDEO_KEY))
             myVideoView!!.setVideoURI(fileFromListUri)
-        }else {
+        } else {
             fileFromStorageUri = intent.data
             myVideoView!!.setVideoURI(fileFromStorageUri)
         }
         myVideoView!!.setOnPreparedListener(this)
         myVideoView!!.setOnErrorListener(this)
         myVideoView!!.setOnCompletionListener(this)
+
     }
 
     fun init() {
@@ -78,7 +80,7 @@ class VideoPlayerActivity : AppCompatActivity(), View.OnClickListener,
         backwardBtn!!.setOnClickListener(this)
         playPauseBtn!!.setOnClickListener(this)
         seekBar!!.setOnSeekBarChangeListener(this)
-        if (!isVideoCompleted) {
+        if (!isVideoCompleted && !isVideoPaused) {
             mediaPlayer.start()
             playPauseBtn!!.setImageResource(R.drawable.ic_baseline_pause_24)
         }
@@ -87,25 +89,33 @@ class VideoPlayerActivity : AppCompatActivity(), View.OnClickListener,
 
         seekBar!!.max = mediaPlayer.duration
         initRunnable(mediaPlayer)
+        if (recoveredLastVideoPosition>0){
+            myVideoView?.seekTo(recoveredLastVideoPosition)
+            seekBar!!.setProgress(recoveredLastVideoPosition)
+            playingTimeTextView?.text = longToTime(mediaPlayer.currentPosition.toLong())
+        }
     }
 
     private fun initRunnable(mp: MediaPlayer) {
         seekProgress = object : Runnable {
             override fun run() {
-                if (!isVideoPaused && !isUserTrackingSeekbar && !isVideoCancelled && !isVideoCompleted ) {
+                if (!isVideoPaused && !isUserTrackingSeekbar && !isVideoCancelled && !isVideoCompleted) {
                     try {
-                        seekBar!!.progress = myVideoView?.currentPosition!!
-                        playingTimeTextView!!.text = longToTime(myVideoView!!.currentPosition.toLong())
-                    }catch (e:Exception){
-                        Toast.makeText(applicationContext,(e.stackTraceToString()),Toast.LENGTH_SHORT).show()
+                        currentPlayingTime = myVideoView?.currentPosition!!
+                        seekBar!!.progress = currentPlayingTime
+                        playingTimeTextView!!.text =
+                            longToTime(myVideoView!!.currentPosition.toLong())
+
+                    } catch (e: Exception) {
+                        Log.d(TAG, "run: ${e.message}")
                     }
                 }
-                handler.postDelayed(this, 200)
+                handler.postDelayed(this, 50)
             }
         }
-        handler.postDelayed(seekProgress as Runnable, 200)
+        handler.postDelayed(seekProgress as Runnable, 50)
         hideController = Runnable {
-            if (!isVideoCompleted && !isVideoCancelled && (myVideoView?.isPlaying == true)) {
+            if (!isVideoCompleted && !isVideoCancelled && !isVideoPaused && (myVideoView?.isPlaying == true)) {
                 videoControllerConstraintLayout!!.visibility = View.INVISIBLE
             }
         }
@@ -120,7 +130,7 @@ class VideoPlayerActivity : AppCompatActivity(), View.OnClickListener,
     override fun onCompletion(mediaPlayer: MediaPlayer) {
         if (fileFromListUri != null) {
             myVideoView?.setVideoURI(fileFromListUri)
-        }else{
+        } else {
             myVideoView?.setVideoURI(fileFromStorageUri)
         }
         isVideoCompleted = true
@@ -154,6 +164,7 @@ class VideoPlayerActivity : AppCompatActivity(), View.OnClickListener,
     private fun findClickedView(view: View) {
         when (view.id) {
             R.id.button_play_pause -> if (myVideoView!!.isPlaying) {
+                currentPlayingTime = myVideoView!!.currentPosition
                 myVideoView!!.pause()
                 playPauseBtn!!.setImageResource(R.drawable.ic_baseline_play_arrow_24)
                 isVideoPaused = true
@@ -216,5 +227,19 @@ class VideoPlayerActivity : AppCompatActivity(), View.OnClickListener,
         isVideoPaused = true
         isVideoCancelled = true
         super.onStop()
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putInt(SAVED_INSTANCE_CURRENT_POSITION_KEY, currentPlayingTime)
+        outState.putBoolean(SAVED_INSTANCE_ISPAUSED_KEY,isVideoPaused)
+        Log.d(TAG, "onSaveInstanceState: $currentPlayingTime")
+    }
+
+    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
+        super.onRestoreInstanceState(savedInstanceState)
+        recoveredLastVideoPosition = savedInstanceState.getInt(SAVED_INSTANCE_CURRENT_POSITION_KEY)
+        isVideoPaused = savedInstanceState.getBoolean(SAVED_INSTANCE_ISPAUSED_KEY)
+        Log.d(TAG, "onRestoreInstanceState: $recoveredLastVideoPosition")
     }
 }

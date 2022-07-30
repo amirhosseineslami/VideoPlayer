@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="activity_video_player_image_button_size">60dp</dimen>
+    <dimen name="activity_video_player_image_button_size">40dp</dimen>
     <dimen name="item_imageView_size">160dp</dimen>
     <dimen name="item_textView_name_textSize">20sp</dimen>
     <dimen name="item_textView_name_padding">10dp</dimen>

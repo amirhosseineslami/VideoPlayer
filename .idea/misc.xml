@@ -4,10 +4,11 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/dev/VideoPlayer2/app/src/main/res/drawable/button_bg.xml" value="0.1425" />
+        <entry key="..\:/dev/VideoPlayer2/app/src/main/res/drawable/controller_bg.xml" value="0.1425" />
         <entry key="..\:/dev/VideoPlayer2/app/src/main/res/drawable/textView_bg.xml" value="0.1425" />
         <entry key="..\:/dev/VideoPlayer2/app/src/main/res/drawable/text_bg.xml" value="0.1425" />
         <entry key="..\:/dev/VideoPlayer2/app/src/main/res/layout/activity_main.xml" value="0.1921875" />
-        <entry key="..\:/dev/VideoPlayer2/app/src/main/res/layout/activity_video_player.xml" value="0.1921875" />
+        <entry key="..\:/dev/VideoPlayer2/app/src/main/res/layout/activity_video_player.xml" value="0.33" />
         <entry key="..\:/dev/VideoPlayer2/app/src/main/res/layout/item_video.xml" value="0.25" />
       </map>
     </option>
